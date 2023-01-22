@@ -2,22 +2,27 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-12">
-                <h3></h3>
+                <h3>{{ contact.name }}</h3>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12">
-                <img src="" alt="">
+            <div class="col-xs-6 vcenter">
+                <img 
+                    [src]="contact.imageUrl" 
+                    alt="{{ contact.name }}" 
+                    class="img-responsive" 
+                    style="max-height: 90px;">
+            </div>
+            <div class="col-xs-6 vcenter">
                 <span class="pull-right">
                     <button class="btn btn-primary" style="margin-right: 6px">Edit</button>
                     <button class="btn btn-danger">Delete</button>
                 </span>
-
             </div>
         </div>
     </div>
     <div class="panel-body">
-        <p><b>Email:</b></p>
-        <p><b>Phone:</b></p>
+        <p><b>Email:</b> {{ contact.email }}</p>
+        <p><b>Phone:</b> {{ contact.phone }}</p>
     </div>
 </div>
