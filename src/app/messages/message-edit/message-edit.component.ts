@@ -22,6 +22,7 @@ export class MessageEditComponent {
   }
 
   onClear() {
-
+    this.subject.nativeElement.value = '';
+    this.msgTxt.nativeElement.value = '';
   }
 }
