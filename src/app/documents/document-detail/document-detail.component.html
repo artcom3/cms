@@ -3,9 +3,9 @@
     <div class="row pad-all">
       <h4 class="title margin-left-right">{{document?.name}}</h4>
       <div class="row pull-right margin-left-right">
-        <a class="btn btn-primary" style="margin-right: 6px">View</a>
-        <a class="btn btn-info" style="margin-right: 6px">Edit</a>
-        <a class="btn btn-danger">Delete</a>
+        <a (click)="onView()" class="btn btn-primary" style="margin-right: 6px">View</a>
+        <a [routerLink]="['edit']" class="btn btn-info" style="margin-right: 6px">Edit</a>
+        <a (click)="onDelete()" class="btn btn-danger">Delete</a>
       </div>
     </div>
   </div>

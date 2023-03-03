@@ -7,11 +7,7 @@ import { Contact } from '../contact.model';
   styleUrls: ['./contact-item.component.css']
 })
 export class ContactItemComponent {
-
+  
   @Input() contact: Contact;
-  @Output() contactSelected = new EventEmitter<void>()
 
-  onSelected() {
-    this.contactSelected.emit();
-  }
 }
