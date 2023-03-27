@@ -46,7 +46,6 @@ export class ContactEditComponent implements OnInit {
   }
 
   isInvalidContact(newContact: Contact) {
-    console.log(newContact)
     if (!newContact) {
       return true;
     }
@@ -90,6 +89,7 @@ export class ContactEditComponent implements OnInit {
       null, value.name, value.email, value.phone, value.imageUrl, this.groupContacts
     );
     if (this.editMode) {
+      this.originalContact = this.contactService.getContact(this.id);
       this.contactService.updateContact(this.originalContact, newContact);
     } else {
       this.contactService.addContact(newContact);

@@ -7,19 +7,21 @@ import { DocumentEditComponent } from './documents/document-edit/document-edit.c
 import { DocumentDetailComponent } from './documents/document-detail/document-detail.component';
 import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
 import { ContactDetailComponent } from './contacts/contact-detail/contact-detail.component';
+import { ContactsResolverService } from './contacts/contacts-resolver-service';
+import { DocumentsResolverService } from "./documents/documents-resolver.service";
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/documents', pathMatch: 'full' },
   { path: 'documents', component: DocumentsComponent, children: [
     { path: 'new', component: DocumentEditComponent },
-    { path: ':id', component: DocumentDetailComponent },
+    { path: ':id', component: DocumentDetailComponent, resolve: [DocumentsResolverService] },
     { path: ':id/edit', component: DocumentEditComponent }
   ] },
-  { path: 'messages', component: MessageListComponent },
+  { path: 'messages', component: MessageListComponent, resolve: [ContactsResolverService]},
   { path: 'contacts', component: ContactsComponent, children: [
     { path: 'new', component: ContactEditComponent },
-    { path: ':id', component: ContactDetailComponent },
-    { path: ':id/edit', component: ContactEditComponent }
+    { path: ':id', component: ContactDetailComponent , resolve: [ContactsResolverService]},
+    { path: ':id/edit', component: ContactEditComponent, resolve: [ContactsResolverService] }
   ] }
 ];
 

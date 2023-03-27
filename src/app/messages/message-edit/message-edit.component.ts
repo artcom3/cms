@@ -16,7 +16,7 @@ export class MessageEditComponent {
 
   onSendMessage() {
     this.messageService.addMessage({
-      id: this.messageService.getMessages().length.toString(),
+      id: null,
       subject: this.subject.nativeElement.value,
       msgText: this.msgTxt.nativeElement.value,
       sender: this.currentSender
