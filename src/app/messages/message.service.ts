@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Message } from './message.model';
 import { MOCKMESSAGES } from './MOCKMESSAGES';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,34 +19,25 @@ export class MessageService {
 
   getMessages() {
     return this.http
-    .get('https://khcms-8c149-default-rtdb.firebaseio.com/messages.json')
+    .get('http://localhost:3000/messages')
+    .pipe(
+      map(response => {
+        console.log(response['message']);
+        return response['messages'];
+      }))
     .subscribe({
       next: (messages: Message[]) => {
         this.messages = messages;
-        this.maxContactId = this.getMaxId();
-        messages.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-        this.messageChangedEvent.emit(messages.slice())
+        this.sortAndSend();
       },
       error: (error:any) => (console.log(error))
     })
   }
 
-  storeContacts(messages: Message[]) {
-    const updatedMessages = JSON.stringify(messages);
-    this.http
-      .put(
-        'https://khcms-8c149-default-rtdb.firebaseio.com/messages.json',
-        updatedMessages,
-        {
-          headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-        }
-      )
-      .subscribe({
-        next: () => {
-          this.messageChangedEvent.emit(messages.slice())
-        },
-        error: (error:any) => (console.log(error))
-      })
+  sortAndSend(){
+    this.messages.sort((a,b) => parseInt(a.id) - parseInt(b.id));
+    console.log(this.messages);
+    this.messageChangedEvent.emit(this.messages.slice())
   }
 
   getMessage(id: string): Message {
@@ -58,23 +50,25 @@ export class MessageService {
     return returnedMessage;
   }
 
-  getMaxId() {
-    let maxId = 0;
-    this.messages.forEach((message) => {
-      const currentId = parseInt(message.id)
-      if (currentId > maxId)
-        maxId = currentId;
-    })
-    return maxId;
-  };
-
-  addMessage(newMessage: Message) {
-    if (!newMessage) {
+  addMessage(message: Message) {
+    if (!message) {
       return;
     }
-    this.maxContactId++;
-    newMessage.id = this.maxContactId.toString();
-    this.messages.push(newMessage);
-    this.storeContacts(this.messages.slice());
+    message.id = '';
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // add to database
+    this.http.post<{ messageInfo: string, message: Message }>('http://localhost:3000/messages',
+    message,
+      { headers: headers })
+      .subscribe(
+        (responseData) => {
+          // add new contact to contacts
+          console.log(responseData);
+          this.messages.push(responseData['message']);
+          this.sortAndSend();
+        }
+      );
   }
 }
